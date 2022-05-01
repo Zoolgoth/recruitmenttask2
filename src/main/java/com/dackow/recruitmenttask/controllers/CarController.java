@@ -18,8 +18,6 @@ public class CarController {
 
     private final CarRepository carRepository;
 
-//    private List<CarDto> carDtos = new ArrayList<>();
-
     @GetMapping
     ResponseEntity getAllCars() {
         return new ResponseEntity(carRepository.findAll(), HttpStatus.OK);
@@ -50,15 +48,6 @@ public class CarController {
     ResponseEntity removeCar(@PathVariable long id) {
         carRepository.deleteById(id);
         return new ResponseEntity(HttpStatus.NO_CONTENT);
-//        Optional<CarDto> founded = carDtos.stream()
-//                .filter(carDto -> carDto.getId() == id)
-//                .findAny();
-//        if (founded.isPresent()) {
-//            carDtos.remove(founded.get());
-//            return new ResponseEntity(HttpStatus.NO_CONTENT);
-//        } else {
-//            return new ResponseEntity("There is no car with id " + id, HttpStatus.BAD_REQUEST);
-//        }
     }
 
     @PutMapping
@@ -74,19 +63,6 @@ public class CarController {
         car.setMark(carDto.getMark());
         car.setOwner(carDto.getOwner());
         car.setWorks(carDto.isWorks());
-//        carDtos.stream()
-//                .filter(c -> c.getId() == carDto.getId())
-//                .findAny()
-//                .ifPresentOrElse(
-//                        c -> {
-//                            c.setDoors(carDto.getDoors());
-//                            c.setMark(carDto.getMark());
-//                            c.setModel(carDto.getModel());
-//                            c.setMark(c.getMark());
-//                            c.setOwner(carDto.getOwner());
-//                            c.setWorks(carDto.isWorks());
-//                        },
-//                        () -> new ResponseEntity("There is no car with id " + carDto.getId(), HttpStatus.BAD_REQUEST));
         return new ResponseEntity(HttpStatus.OK);
     }
 }
