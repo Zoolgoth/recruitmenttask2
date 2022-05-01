@@ -1,0 +1,15 @@
+spring:
+  datasource:
+    url: jdbc:h2:mem:myDb
+    username: zool
+    password: password
+    driverClassName: org.h2.Driver
+    jpa:
+      spring.jpa.database-platform: org.hibernate.dialect.H2Dialect
+      show-sql: true
+      hibernate:
+        ddl-auto: drop-create
+  h2:
+    console:
+      enabled: true
+      path: '/console'
