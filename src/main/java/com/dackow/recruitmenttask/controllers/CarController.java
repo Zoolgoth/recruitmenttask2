@@ -2,14 +2,14 @@ package com.dackow.recruitmenttask.controllers;
 
 
 import com.dackow.recruitmenttask.models.dtos.CarDto;
-import com.dackow.recruitmenttask.models.entities.Car;
 import com.dackow.recruitmenttask.repositories.CarRepository;
+import com.dackow.recruitmenttask.services.CarService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Optional;
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -17,52 +17,32 @@ import java.util.Optional;
 public class CarController {
 
     private final CarRepository carRepository;
+    private final CarService carService;
 
     @GetMapping
-    ResponseEntity getAllCars() {
-        return new ResponseEntity(carRepository.findAll(), HttpStatus.OK);
+    ResponseEntity<List<CarDto>> getAllCars() {
+        return new ResponseEntity<>(carService.getAllCars(), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    ResponseEntity getSingleCar(@PathVariable long id) {
-        return carRepository.findById(id)
-                .map(car -> new ResponseEntity(car, HttpStatus.OK))
-                .orElse(new ResponseEntity("There is no car with id " + id, HttpStatus.BAD_REQUEST));
+    ResponseEntity<CarDto> getSingleCar(@PathVariable Long id) {
+        return new ResponseEntity<>(carService.getById(id).get(), HttpStatus.OK);
     }
 
     @PostMapping
-    ResponseEntity addSingleCar(@RequestBody CarDto carDto) {
-        Car car = Car.builder()
-                .doors(carDto.getDoors())
-                .mark(carDto.getMark())
-                .model(carDto.getModel())
-                .mark(carDto.getMark())
-                .owner(carDto.getOwner())
-                .works(carDto.isWorks())
-                .build();
-        carRepository.save(car);
-        return new ResponseEntity(HttpStatus.CREATED);
+    ResponseEntity<Void> addSingleCar(@RequestBody CarDto carDto) {
+        carService.addCar(carDto);
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @DeleteMapping("/{id}")
-    ResponseEntity removeCar(@PathVariable long id) {
+    ResponseEntity<Void> removeCar(@PathVariable long id) {
         carRepository.deleteById(id);
-        return new ResponseEntity(HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
-
     @PutMapping
-    ResponseEntity updateCar(@RequestBody CarDto carDto) {
-        Optional<Car> founded = carRepository.findById(carDto.getId());
-        if (founded.isEmpty()) {
-            return new ResponseEntity("There is no car with id " + carDto.getId(), HttpStatus.BAD_REQUEST);
-        }
-        Car car = founded.get();
-        car.setDoors(carDto.getDoors());
-        car.setMark(carDto.getMark());
-        car.setModel(carDto.getModel());
-        car.setMark(carDto.getMark());
-        car.setOwner(carDto.getOwner());
-        car.setWorks(carDto.isWorks());
-        return new ResponseEntity(HttpStatus.OK);
+    ResponseEntity<CarDto> updateCar(@RequestBody CarDto carDto) {
+        CarDto saved = carService.updateCar(carDto);
+        return new ResponseEntity<>(saved, HttpStatus.OK);
     }
 }

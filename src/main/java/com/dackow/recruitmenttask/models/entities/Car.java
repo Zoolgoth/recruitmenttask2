@@ -2,10 +2,7 @@ package com.dackow.recruitmenttask.models.entities;
 
 import lombok.*;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Getter
 @Setter
@@ -20,6 +17,7 @@ public class Car {
     private int doors;
     private String mark;
     private String model;
-    private String owner;
+    @ManyToOne
+    private Owner owner;
     private boolean works;
 }
