@@ -1,6 +1,5 @@
 package com.dackow.recruitmenttask.services;
 
-import com.dackow.recruitmenttask.models.dtos.CarDto;
 import com.dackow.recruitmenttask.models.dtos.OwnerDto;
 import com.dackow.recruitmenttask.models.entities.Owner;
 import com.dackow.recruitmenttask.repositories.CarRepository;
@@ -42,14 +41,16 @@ public class OwnerService {
         ownerRepository.save(owner);
     }
 
-    public CarDto updateOwner(OwnerDto ownerDto) {
+    public OwnerDto updateOwner(OwnerDto ownerDto) {
         Optional<Owner> founded = ownerRepository.findById(ownerDto.getId());
         Owner owner = founded.get();
-//        owner.getId(ownerDto.getLastName());
+        owner.setFirstName(ownerDto.getFirstName());
+        owner.setLastName(ownerDto.getLastName());
+//        owner.setCars(carRepository.getById(ownerDto.getCarsId()));
 
 
         ownerRepository.save(owner);
-//        return modelMapper.map(owner, OwnerDto.class);
+        return modelMapper.map(owner, OwnerDto.class);
     }
 
 }

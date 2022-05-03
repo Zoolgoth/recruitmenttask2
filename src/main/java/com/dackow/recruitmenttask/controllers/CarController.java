@@ -40,6 +40,7 @@ public class CarController {
         carRepository.deleteById(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
+
     @PutMapping
     ResponseEntity<CarDto> updateCar(@RequestBody CarDto carDto) {
         CarDto saved = carService.updateCar(carDto);
